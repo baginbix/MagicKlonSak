@@ -10,10 +10,8 @@ public class BaseUnit : MonoBehaviour {
 	public bool combatLock;
 	GameObject enemy;
 	NavMeshAgent agent;
-	public bool inRange;
 	public float range;
 	string enemyTag;
-
 
 	public string name;
 	protected float cost;
@@ -48,6 +46,9 @@ public class BaseUnit : MonoBehaviour {
 				}
 			}
 		}
+		else if(combatLock && chase != null)
+			chase.ChangeTarget(enemy.transform.position);
+
 		if(health.IsDead())
 			Destroy(gameObject);
 	}
@@ -79,6 +80,13 @@ public class BaseUnit : MonoBehaviour {
 		}
 	}
 
+	void OnTriggerExit(Collider other)
+	{
+		if(other.gameObject == enemy)
+			ExitCombatLock();
+	}
+
+
 	public void TakeDamage(float amount)
 	{
 		if(gameObject.tag !="VjsMamma")
@@ -99,9 +107,9 @@ public class BaseUnit : MonoBehaviour {
 	{
 		combatLock = false;
 		enemy = null;
-		inRange = false;
 		agent.enabled = true;
-		chase.SetPrimaryTarget();
+		if(chase != null)
+			chase.SetPrimaryTarget();
 	}
 
 	bool InRange()

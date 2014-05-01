@@ -29,6 +29,7 @@ public class Chase: MonoBehaviour {
 
 	public void ChangeTarget(Vector3 destination)
 	{
+		agent.enabled = true;
 		agent.SetDestination(destination);
 		subTargetSet = true;
 	}
